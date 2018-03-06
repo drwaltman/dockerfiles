@@ -1,14 +1,14 @@
 # References:
-# https://github.com/pytorch/pytorch/blob/master/Dockerfile
-# https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/docker/Dockerfile.gpu
-# https://github.com/ceshine/Dockerfiles/blob/master/cuda/fastai/Dockerfile
-# https://github.com/Paperspace/fastai-docker/blob/master/Dockerfile
-# https://github.com/hamelsmu/Docker_Tutorial/blob/master/gpu_tutorial/Dockerfile.gpu
-# https://github.com/MattKleinsmith/dockerfiles/blob/master/fastai/Dockerfile
 # https://github.com/ContinuumIO/docker-images/blob/master/anaconda3/Dockerfile
 # https://github.com/Kaggle/docker-python/blob/master/Dockerfile
+# https://github.com/MattKleinsmith/dockerfiles/blob/master/fastai/Dockerfile
+# https://github.com/Paperspace/fastai-docker/blob/master/Dockerfile
+# https://github.com/ceshine/Dockerfiles/blob/master/cuda/fastai/Dockerfile
+# https://github.com/hamelsmu/Docker_Tutorial/blob/master/gpu_tutorial/Dockerfile.gpu
+# https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/docker/Dockerfile.gpu
+# https://github.com/pytorch/pytorch/blob/master/Dockerfile
 
-# Choose base CUDA image:
+# Choose CUDA image:
 # https://store.docker.com/community/images/nvidia/cuda
 # https://github.com/NVIDIA/nvidia-docker/wiki/CUDA
 FROM nvidia/cuda:9.0-runtime-ubuntu16.04
@@ -71,4 +71,3 @@ RUN pip --no-cache-dir install --upgrade \
 
 # Append CUPTI files for TensorFlow CUDA profiling
 ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
-
