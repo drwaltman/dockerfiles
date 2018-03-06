@@ -15,8 +15,8 @@ FROM nvidia/cuda:9.0-runtime-ubuntu16.04
 
 # Choose CUDNN version:
 # http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1604/x86_64/
-# CUDNN 7.0.4.31 chosen to fix conflicts with TensorFlow 1.6.0
-ENV CUDNN_VERSION 7.0.4.31
+# CUDNN 7.0.5.15 chosen to fix conflicts with TensorFlow 1.6.0
+ENV CUDNN_VERSION 7.0.5.15
 
 # Set language to C.UTF-8 to prevent Linux system from breaking on Python 3*
 # http://bugs.python.org/issue19846
