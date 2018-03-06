@@ -1,0 +1,74 @@
+# References:
+# https://github.com/pytorch/pytorch/blob/master/Dockerfile
+# https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/docker/Dockerfile.gpu
+# https://github.com/ceshine/Dockerfiles/blob/master/cuda/fastai/Dockerfile
+# https://github.com/Paperspace/fastai-docker/blob/master/Dockerfile
+# https://github.com/hamelsmu/Docker_Tutorial/blob/master/gpu_tutorial/Dockerfile.gpu
+# https://github.com/MattKleinsmith/dockerfiles/blob/master/fastai/Dockerfile
+# https://github.com/ContinuumIO/docker-images/blob/master/anaconda3/Dockerfile
+# https://github.com/Kaggle/docker-python/blob/master/Dockerfile
+
+# Choose base CUDA image:
+# https://store.docker.com/community/images/nvidia/cuda
+# https://github.com/NVIDIA/nvidia-docker/wiki/CUDA
+FROM nvidia/cuda:9.0-runtime-ubuntu16.04
+
+# Choose CUDNN version:
+# http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1604/x86_64/
+# CUDNN 7.0.4.31 chosen to fix conflicts with TensorFlow 1.6.0
+ENV CUDNN_VERSION 7.0.4.31
+
+# Set language to C.UTF-8 to prevent Linux system from breaking on Python 3*
+# http://bugs.python.org/issue19846
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
+# Install apt-get packages
+RUN apt-get update --fix-missing \
+    && apt-get install -y --allow-downgrades --no-install-recommends \
+        build-essential \
+        curl \
+        libcudnn7=$CUDNN_VERSION-1+cuda9.0 \
+        software-properties-common \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install conda with Python 3.6
+ENV PYTHON_VERSION 3.6
+RUN curl -o ~/miniconda.sh -O https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && chmod +x ~/miniconda.sh \
+    && ~/miniconda.sh -b -p /opt/conda \
+    && rm ~/miniconda.sh
+ENV PATH /opt/conda/bin:$PATH
+
+# Update conda and install packages, including PyTorch
+# http://pytorch.org/
+RUN conda update -n base conda \
+    && conda install \
+        pytorch \
+        torchvision \
+        cuda90 \
+        -c pytorch
+
+# Install pip packages, including TensorFlow
+RUN pip --no-cache-dir install --upgrade \
+        Cython \
+        html5lib \
+        h5py \
+        jupyter \
+        jupyter_contrib_nbextensions \
+        keras \
+        keras-tqdm \
+        matplotlib \
+        nltk \
+        pandas \
+        scikit-image \
+        scikit-learn \
+        scipy \
+        tensorflow-gpu==1.6.0 \
+    && pip --no-cache-dir install --upgrade wordbatch \
+    && jupyter contrib nbextension install --user
+
+# Append CUPTI files for TensorFlow CUDA profiling
+ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
+

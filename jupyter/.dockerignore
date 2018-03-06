@@ -1,0 +1,6 @@
+# blacklist all files and folders
+/*
+
+# whitelist
+# !.dockerignore
+# !Dockerfile
