@@ -70,7 +70,6 @@ RUN pip --no-cache-dir install --upgrade \
         scipy \
         tensorflow-gpu==1.6.0 \
     && pip --no-cache-dir install --upgrade \
-        git+https://github.com/broadinstitute/keras-rcnn.git \
         wordbatch \
     && jupyter contrib nbextension install --user
 
