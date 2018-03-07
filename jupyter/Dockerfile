@@ -55,9 +55,11 @@ RUN pip --no-cache-dir install --upgrade \
         Cython \
         html5lib \
         h5py \
+        jsonschema \
         jupyter \
         jupyter_contrib_nbextensions \
         keras \
+        keras-resnet \
         keras-tqdm \
         matplotlib \
         nltk \
@@ -66,7 +68,9 @@ RUN pip --no-cache-dir install --upgrade \
         scikit-learn \
         scipy \
         tensorflow-gpu==1.6.0 \
-    && pip --no-cache-dir install --upgrade wordbatch \
+    && pip --no-cache-dir install --upgrade \
+        git+https://github.com/broadinstitute/keras-rcnn.git \
+        wordbatch \
     && jupyter contrib nbextension install --user
 
 # Append CUPTI files for TensorFlow CUDA profiling
