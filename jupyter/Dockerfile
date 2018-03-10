@@ -56,6 +56,7 @@ RUN pip --no-cache-dir install --upgrade \
         Cython \
         html5lib \
         h5py \
+        imageio \
         jsonschema \
         jupyter \
         jupyter_contrib_nbextensions \
