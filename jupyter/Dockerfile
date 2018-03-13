@@ -28,8 +28,10 @@ RUN apt-get update --fix-missing \
     && apt-get install -y --allow-downgrades --no-install-recommends \
         build-essential \
         curl \
-        git \
         libcudnn7=$CUDNN_VERSION-1+cuda9.0 \
+        libsm6 \
+        libxext6 \
+        libxrender-dev \
         software-properties-common \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -65,6 +67,7 @@ RUN pip --no-cache-dir install --upgrade \
         keras-tqdm \
         matplotlib \
         nltk \
+        opencv-python \
         pandas \
         scikit-image \
         scikit-learn \
