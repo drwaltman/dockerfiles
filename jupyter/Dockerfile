@@ -79,5 +79,8 @@ RUN pip --no-cache-dir install --upgrade \
         wordbatch \
     && jupyter contrib nbextension install --user
 
-# Append CUPTI files for TensorFlow CUDA profiling
+# Add CUPTI files for TensorFlow CUDA profiling
 ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
+
+# Add location to allow access to custom libraries throughout environment
+ENV PYTHONPATH /home/jovyan/work/libraries:$PYTHONPATH
