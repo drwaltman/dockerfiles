@@ -54,8 +54,10 @@ RUN conda update -n base conda \
         -c pytorch
 
 # Install pip packages, including TensorFlow
+# Cython 0.25.2 chosen to avoid AttributeError issue
+# https://github.com/cython/cython/issues/1953
 RUN pip --no-cache-dir install --upgrade \
-        Cython \
+        Cython==0.25.2 \
         html5lib \
         h5py \
         imageio \
