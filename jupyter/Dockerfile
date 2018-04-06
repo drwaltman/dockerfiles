@@ -11,11 +11,7 @@
 # Choose CUDA image:
 # https://store.docker.com/community/images/nvidia/cuda
 # https://github.com/NVIDIA/nvidia-docker/wiki/CUDA
-FROM nvidia/cuda:9.0-runtime-ubuntu16.04
-
-# Choose CUDNN version:
-# http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1604/x86_64/
-ENV CUDNN_VERSION 7.1.2.21
+FROM nvidia/cuda:9.0-cudnn7-runtime-ubuntu16.04
 
 # Set language to C.UTF-8 to prevent Linux system from breaking on Python 3*
 # http://bugs.python.org/issue19846
@@ -27,7 +23,6 @@ RUN apt-get update --fix-missing \
     && apt-get install -y --allow-downgrades --no-install-recommends \
         build-essential \
         curl \
-        libcudnn7=$CUDNN_VERSION-1+cuda9.0 \
         libsm6 \
         libxext6 \
         libxrender-dev \
