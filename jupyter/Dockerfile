@@ -15,8 +15,7 @@ FROM nvidia/cuda:9.0-runtime-ubuntu16.04
 
 # Choose CUDNN version:
 # http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1604/x86_64/
-# CUDNN 7.0.5.15 chosen to fix conflicts with TensorFlow 1.6.0
-ENV CUDNN_VERSION 7.0.5.15
+ENV CUDNN_VERSION 7.1.2.21
 
 # Set language to C.UTF-8 to prevent Linux system from breaking on Python 3*
 # http://bugs.python.org/issue19846
@@ -53,10 +52,11 @@ RUN conda update -n base conda \
         cuda90 \
         -c pytorch
 
-# Install pip packages, including TensorFlow
+# Upgrade pip and install packages, including TensorFlow
 # Cython 0.25.2 chosen to avoid AttributeError issue
 # https://github.com/cython/cython/issues/1953
-RUN pip --no-cache-dir install --upgrade \
+RUN pip --no-cache-dir install --upgrade pip \
+    && pip --no-cache-dir install --upgrade \
         Cython==0.25.2 \
         html5lib \
         h5py \
@@ -74,7 +74,7 @@ RUN pip --no-cache-dir install --upgrade \
         scikit-image \
         scikit-learn \
         scipy \
-        tensorflow-gpu==1.6.0 \
+        tensorflow-gpu \
     && pip --no-cache-dir install --upgrade \
         wordbatch \
     && jupyter contrib nbextension install --user
