@@ -27,6 +27,7 @@ RUN apt-get update --fix-missing \
         libxext6 \
         libxrender-dev \
         software-properties-common \
+    && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
