@@ -50,7 +50,7 @@ RUN conda update -n base conda \
 # Cython 0.25.2 chosen to avoid AttributeError issue
 # https://github.com/cython/cython/issues/1953
 RUN pip --no-cache-dir install --upgrade pip \
-    && pip --no-cache-dir install --upgrade \
+    && pip --no-cache-dir install \
         Cython==0.25.2 \
         html5lib \
         h5py \
