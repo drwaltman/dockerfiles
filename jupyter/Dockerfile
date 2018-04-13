@@ -19,6 +19,8 @@ ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
 # Install apt-get packages
+# OpenCV dependencies: libsm6, libxext6, libxrender-dev
+# https://github.com/ray-project/ray/issues/923
 RUN apt-get update --fix-missing \
     && apt-get install -y --allow-downgrades --no-install-recommends \
         build-essential \
@@ -39,14 +41,10 @@ RUN curl -o ~/miniconda.sh -O https://repo.continuum.io/miniconda/Miniconda3-lat
     && rm ~/miniconda.sh
 ENV PATH /opt/conda/bin:$PATH
 
-# Update conda and install packages, including PyTorch
+# Update conda and install PyTorch and dependencies
 # http://pytorch.org/
 RUN conda update -n base conda \
-    && conda install \
-        pytorch \
-        torchvision \
-        cuda90 \
-        -c pytorch
+    && conda install pytorch torchvision cuda90 -c pytorch
 
 # Upgrade pip and install packages, including TensorFlow
 # Cython 0.25.2 chosen to avoid AttributeError issue
