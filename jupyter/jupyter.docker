@@ -10,18 +10,16 @@ ENV LC_ALL C.UTF-8
 
 # Install apt-get packages
 # deadsnakes/ppa: python3.6-dev
-# https://github.com/ray-project/ray/issues/923
 RUN apt-get update \
     && apt-get install -y --no-install-recommends software-properties-common \
     && add-apt-repository ppa:deadsnakes/ppa \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
+        cuda-command-line-tools-9-0 \
         curl \
         libcudnn7=7.0.*+cuda9.0 \
-        libsm6 \
-        libxext6 \
-        libxrender-dev \
+        libgtk2.0-dev \
         python3.6-dev \
     && apt-get autoremove -y \
     && apt-get clean \
@@ -35,9 +33,9 @@ RUN ln -s /usr/bin/python3.6 /usr/local/bin/python3 \
 # Install pip packages
 # Cython 0.25.2 chosen to avoid AttributeError issue
 # https://github.com/cython/cython/issues/1953
-# opencv-python: libsm6, libxext6, libxrender-dev
-RUN curl https://bootstrap.pypa.io/get-pip.py | python3
-RUN pip install --no-cache-dir \
+# opencv-python: libgtk2.0-dev
+RUN curl https://bootstrap.pypa.io/get-pip.py | python \
+    && pip install --no-cache-dir \
         bleach==1.5.0 \
         Cython==0.25.2 \
         html5lib==0.9999999 \
@@ -63,5 +61,8 @@ RUN pip install --no-cache-dir \
         wordbatch \
     && jupyter contrib nbextension install --user
 
-# Add path for libraries to be accessible via mount
+# Add CUPTI path for TensorFlow CUDA profiling
+ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+# Allow local python libraries to be accessible via mount
 ENV PYTHONPATH /home/jovyan/work/libraries${PYTHONPATH:+:${PYTHONPATH}}
