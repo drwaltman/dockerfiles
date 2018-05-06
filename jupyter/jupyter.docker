@@ -55,7 +55,7 @@ RUN curl https://bootstrap.pypa.io/get-pip.py | python \
         scikit-image \
         scikit-learn \
         scipy \
-        tensorflow-gpu==1.7.0 \
+        tensorflow-gpu==1.8.0 \
         torchvision \
     && pip install --no-cache-dir \
         wordbatch \
