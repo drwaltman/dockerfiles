@@ -16,7 +16,7 @@ RUN apt-get update \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
-        cuda-command-line-tools-9-0 \
+        cuda-command-line-tools-9.0 \
         curl \
         libcudnn7=7.0.*+cuda9.0 \
         libgtk2.0-dev \
@@ -51,7 +51,7 @@ RUN curl https://bootstrap.pypa.io/get-pip.py | python \
         nltk \
         opencv-python \
         pandas \
-        http://download.pytorch.org/whl/cu90/torch-0.3.1-cp36-cp36m-linux_x86_64.whl \
+        http://download.pytorch.org/whl/cu90/torch-0.4.0-cp36-cp36m-linux_x86_64.whl \
         scikit-image \
         scikit-learn \
         scipy \
