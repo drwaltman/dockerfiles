@@ -1,70 +1,71 @@
 # Choose CUDA image:
 # https://store.docker.com/community/images/nvidia/cuda
 # https://github.com/NVIDIA/nvidia-docker/wiki/CUDA
-FROM nvidia/cuda:9.0-runtime-ubuntu16.04
+FROM nvidia/cuda:10.0-cudnn7-runtime-ubuntu16.04
 
-# Set language to C.UTF-8 to prevent Linux system from breaking on Python 3*
-# http://bugs.python.org/issue19846
-ENV LANG C.UTF-8
-ENV LC_ALL C.UTF-8
+# NOTES
+# TensorFlow currently supported up to Python 3.6
+# TensorFlow won't support CUDA 10.0 until ~mid Jan
+# https://github.com/tensorflow/tensorflow/issues/22706#issuecomment-442262939
 
 # Install apt-get packages
-# deadsnakes/ppa: python3.6-dev
+# deadsnakes/ppa: python3.7-dev
+# opencv-python dependency - libgtk2.0-dev
 RUN apt-get update \
     && apt-get install -y --no-install-recommends software-properties-common \
     && add-apt-repository ppa:deadsnakes/ppa \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
-        cuda-command-line-tools-9.0 \
         curl \
-        libcudnn7=7.0.*+cuda9.0 \
         libgtk2.0-dev \
-        python3.6-dev \
+        python3.7-dev \
     && apt-get autoremove -y \
     && apt-get clean \
     && add-apt-repository --remove ppa:deadsnakes/ppa \
     && rm -rf /var/lib/apt/lists/*
 
-# Link python3.6 to python, python3
-RUN ln -s /usr/bin/python3.6 /usr/local/bin/python3 \
-    && ln -s /usr/bin/python3.6 /usr/local/bin/python
+# Link python3.7 to python, python3
+RUN ln -s /usr/bin/python3.7 /usr/local/bin/python3 \
+    && ln -s /usr/bin/python3.7 /usr/local/bin/python
 
 # Install pip packages
-# Cython 0.25.2 chosen to avoid AttributeError issue
-# https://github.com/cython/cython/issues/1953
-# opencv-python: libgtk2.0-dev
+# TensorBoard dependencies - bleach==1.5.0, html5lib=0.9999999
 RUN curl https://bootstrap.pypa.io/get-pip.py | python \
     && pip install --no-cache-dir \
-        bleach==1.5.0 \
-        Cython==0.25.2 \
-        html5lib==0.9999999 \
+        # ==========
+        # TensorFlow
+        # ==========
+        #bleach==1.5.0 \
+        #html5lib==0.9999999 \
+        #tensorflow-gpu==1.12.0 \
+        # =======
+        # PyTorch
+        # =======
+        http://download.pytorch.org/whl/cu100/torch-1.0.0-cp37-cp37m-linux_x86_64.whl \
+        torchvision \
+        # =====
+        # Other
+        # =====
+        Cython \
         h5py \
         imageio \
         jsonschema \
         jupyter \
         jupyter_contrib_nbextensions \
-        keras \
-        keras-resnet \
-        keras-tqdm \
         matplotlib \
         nltk \
         opencv-python \
         pandas \
         pymongo \
-        http://download.pytorch.org/whl/cu90/torch-0.4.0-cp36-cp36m-linux_x86_64.whl \
         requests \
         scikit-image \
         scikit-learn \
         scipy \
-        tensorflow-gpu==1.8.0 \
-        torchvision \
-    && pip install --no-cache-dir \
-        wordbatch \
     && jupyter contrib nbextension install --user
 
 # Add CUPTI path for TensorFlow CUDA profiling
-ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+#ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 
 # Allow local python libraries to be accessible via mount
 ENV PYTHONPATH /home/jovyan/work/libraries${PYTHONPATH:+:${PYTHONPATH}}
